@@ -6,6 +6,7 @@ It defines the GraphicsEngine class and initializes the Pygame library.
 import sys
 import pygame as pg
 import moderngl as mgl
+from model import Triangle
 
 
 class GraphicsEngine:
@@ -25,6 +26,7 @@ class GraphicsEngine:
         pg.display.set_mode(self.win_size, flags=pg.OPENGL | pg.DOUBLEBUF)
         self.ctx = mgl.create_context()
         self.clock = pg.time.Clock()
+        self.scene = Triangle(self)
 
     def check_events(self):
         """
@@ -33,6 +35,7 @@ class GraphicsEngine:
         """
         for event in pg.event.get():
             if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+                self.scene.destroy()
                 pg.quit()
                 sys.exit()
 
@@ -41,6 +44,7 @@ class GraphicsEngine:
         This method clears the screen and swaps the buffers to display the rendered scene.
         """
         self.ctx.clear(color=(0.1, 0.1, 0.2))
+        self.scene.render()
         pg.display.flip()
 
     def run(self):
