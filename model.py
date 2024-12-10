@@ -62,7 +62,7 @@ class Triangle:
         vertex_data : numpy.ndarray
             The vertex data, which is a 3D array of floats.
         """
-        vertex_data = [(0, 0, 0), (1, 0, 0), (0, 1, 0)]
+        vertex_data = [(-0.5, -0.5, 0), (0.5, -0.5, 0), (0, 0.5, 0)]
         vertex_data = np.array(vertex_data, dtype='f4')
         return vertex_data
 
