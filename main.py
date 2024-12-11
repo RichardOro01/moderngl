@@ -6,7 +6,8 @@ It defines the GraphicsEngine class and initializes the Pygame library.
 import sys
 import pygame as pg
 import moderngl as mgl
-from model import Triangle
+from model import Cube
+from camera import Camera
 
 
 class GraphicsEngine:
@@ -26,7 +27,8 @@ class GraphicsEngine:
         pg.display.set_mode(self.win_size, flags=pg.OPENGL | pg.DOUBLEBUF)
         self.ctx = mgl.create_context()
         self.clock = pg.time.Clock()
-        self.scene = Triangle(self)
+        self.camera = Camera(self)
+        self.scene = Cube(self)
 
     def check_events(self):
         """
