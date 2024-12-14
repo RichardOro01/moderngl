@@ -29,6 +29,7 @@ class GraphicsEngine:
         self.clock = pg.time.Clock()
         self.camera = Camera(self)
         self.scene = Cube(self)
+        self.time = 0
 
     def check_events(self):
         """
@@ -49,12 +50,25 @@ class GraphicsEngine:
         self.scene.render()
         pg.display.flip()
 
+    def get_time(self):
+        """
+        Get the current time since the Pygame initialization.
+
+        Returns
+        -------
+        float
+            The current time in seconds.
+        """
+        self.time = pg.time.get_ticks() * 0.001
+        return self.time
+
     def run(self):
         """
         This method runs the main loop of the graphics engine.
         It checks for events and renders the scene on each iteration.
         """
         while True:
+            self.get_time()
             self.check_events()
             self.render()
             self.clock.tick(60)

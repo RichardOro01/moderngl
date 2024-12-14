@@ -3,6 +3,7 @@ This module contains classes and functions for rendering 3D graphics.
 It includes the cube class, which is used to render a simple triangle and a simple cube.
 """
 import numpy as np
+import glm
 
 
 class Triangle:
@@ -125,7 +126,27 @@ class Cube:
         self.vbo = self.get_vbo()
         self.shader_program = self.get_shader_program('default')
         self.vao = self.get_vao()
+        self.m_model = self.get_model_matrix()
         self.on_init()
+
+    def update(self):
+        """
+        Update the cube object.
+        """
+        m_model = glm.rotate(self.m_model, self.app.time, glm.vec3(0, 1, 0))
+        self.shader_program['m_model'].write(m_model)
+
+    def get_model_matrix(self):
+        """
+        Get the model matrix for the cube.
+
+        Returns
+        -------
+        model_matrix : numpy.ndarray
+            The model matrix, which is a 4x4 array of floats.
+        """
+        model_matrix = glm.mat4()
+        return model_matrix
 
     def on_init(self):
         """
@@ -133,11 +154,13 @@ class Cube:
         """
         self.shader_program['m_proj'].write(self.app.camera.m_proj)
         self.shader_program['m_view'].write(self.app.camera.m_view)
+        self.shader_program['m_model'].write(self.m_model)
 
     def render(self):
         """
         Render the cube.
         """
+        self.update()
         self.vao.render()
 
     def destroy(self):
