@@ -26,6 +26,8 @@ class GraphicsEngine:
             pg.GL_CONTEXT_PROFILE_MASK, pg.GL_CONTEXT_PROFILE_CORE)
         pg.display.set_mode(self.win_size, flags=pg.OPENGL | pg.DOUBLEBUF)
         self.ctx = mgl.create_context()
+        # self.ctx.front_face = 'cw'
+        self.ctx.enable(flags=mgl.DEPTH_TEST | mgl.CULL_FACE)
         self.clock = pg.time.Clock()
         self.camera = Camera(self)
         self.scene = Cube(self)

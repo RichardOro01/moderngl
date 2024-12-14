@@ -4,6 +4,7 @@ It includes the cube class, which is used to render a simple triangle and a simp
 """
 import numpy as np
 import glm
+import pygame as pg
 
 
 class Triangle:
@@ -127,7 +128,23 @@ class Cube:
         self.shader_program = self.get_shader_program('default')
         self.vao = self.get_vao()
         self.m_model = self.get_model_matrix()
+        self.texture = self.get_texture(path='textures/stone.jpg')
         self.on_init()
+
+    def get_texture(self, path):
+        """
+        Get the texture for the cube.
+
+        Returns
+        -------
+        texture : mgl.Texture
+            The texture.
+        """
+        texture = pg.image.load(path).convert()
+        texture = pg.transform.flip(texture, flip_x=False, flip_y=True)
+        texture = self.ctx.texture(size=texture.get_size(
+        ), components=3, data=pg.image.tostring(texture, 'RGB'))
+        return texture
 
     def update(self):
         """
@@ -152,6 +169,8 @@ class Cube:
         """
         Initialize the cube object.
         """
+        self.shader_program['u_texture_0'] = 0
+        self.texture.use()
         self.shader_program['m_proj'].write(self.app.camera.m_proj)
         self.shader_program['m_view'].write(self.app.camera.m_view)
         self.shader_program['m_model'].write(self.m_model)
@@ -181,7 +200,7 @@ class Cube:
             The vertex array object.
         """
         vao = self.ctx.vertex_array(
-            self.shader_program, [(self.vbo, '3f', 'in_position')])
+            self.shader_program, [(self.vbo, '2f 3f', 'in_texcoord_0', 'in_position')])
         return vao
 
     def get_vertex_data(self):
@@ -199,7 +218,18 @@ class Cube:
                    (1, 6, 7), (6, 5, 4), (4, 7, 6),
                    (3, 4, 5), (3, 5, 0), (3, 7, 4),
                    (3, 2, 7), (0, 6, 1), (0, 5, 7)]
+
+        text_cord = [(0, 0), (1, 0), (1, 1), (0, 1)]
+        text_cord_indices = [(0, 2, 3), (0, 1, 2),
+                             (0, 2, 3), (0, 1, 2),
+                             (0, 1, 2), (2, 3, 0),
+                             (2, 3, 0), (2, 0, 1),
+                             (0, 2, 3), (0, 1, 2),
+                             (3, 1, 2), (3, 0, 1)]
+
+        text_cord_data = self.get_data(text_cord, text_cord_indices)
         vertex_data = self.get_data(vertices, indices)
+        vertex_data = np.hstack((text_cord_data, vertex_data))
         return vertex_data
 
     @staticmethod
