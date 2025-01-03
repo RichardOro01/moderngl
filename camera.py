@@ -1,13 +1,12 @@
 # pylint: disable=no-member
-
 import glm
 import pygame as pg
 
-FOV = 50
+FOV = 50  # deg
 NEAR = 0.1
 FAR = 100
-SPEED = 0.01
-SENSITIVITY = 0.05
+SPEED = 0.005
+SENSITIVITY = 0.04
 
 
 class Camera:
@@ -20,23 +19,26 @@ class Camera:
         self.forward = glm.vec3(0, 0, -1)
         self.yaw = yaw
         self.pitch = pitch
-        self.m_proj = self.get_projection_matrix()
+        # view matrix
         self.m_view = self.get_view_matrix()
+        # projection matrix
+        self.m_proj = self.get_projection_matrix()
 
     def rotate(self):
         rel_x, rel_y = pg.mouse.get_rel()
         self.yaw += rel_x * SENSITIVITY
         self.pitch -= rel_y * SENSITIVITY
-        self.pitch = max(-90, min(89, self.pitch))
+        self.pitch = max(-89, min(89, self.pitch))
 
     def update_camera_vectors(self):
         yaw, pitch = glm.radians(self.yaw), glm.radians(self.pitch)
+
         self.forward.x = glm.cos(yaw) * glm.cos(pitch)
         self.forward.y = glm.sin(pitch)
         self.forward.z = glm.sin(yaw) * glm.cos(pitch)
 
         self.forward = glm.normalize(self.forward)
-        self.right = glm.normalize(glm.cross(self.forward, self.up))
+        self.right = glm.normalize(glm.cross(self.forward, glm.vec3(0, 1, 0)))
         self.up = glm.normalize(glm.cross(self.right, self.forward))
 
     def update(self):

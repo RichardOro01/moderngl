@@ -8,6 +8,7 @@ import pygame as pg
 import moderngl as mgl
 from model import Cube
 from camera import Camera
+from light import Light
 
 
 class GraphicsEngine:
@@ -31,6 +32,7 @@ class GraphicsEngine:
         # self.ctx.front_face = 'cw'
         self.ctx.enable(flags=mgl.DEPTH_TEST | mgl.CULL_FACE)
         self.clock = pg.time.Clock()
+        self.light = Light()
         self.camera = Camera(self)
         self.scene = Cube(self)
         self.time = 0
