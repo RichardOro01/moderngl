@@ -18,6 +18,8 @@ class Scene:
             for z in range(-n, n, s):
                 add(Cube(app, pos=(x, -s, z)))
 
+        add(Cat(app, pos=(0, -1, -10)))
+
     def render(self):
         for obj in self.objects:
             obj.render()
