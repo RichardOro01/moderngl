@@ -14,6 +14,9 @@ class Scene:
         app = self.app
         add = self.addObject
         add(Cube(app))
+        add(Cube(app, tex_id=1, pos=(-2.5, 0, 0),
+            rot=(45, 0, 0), scale=(0.5, 0.5, 0.5)))
+        add(Cube(app, tex_id=2, pos=(2.5, 0, 0), rot=(0, 0, 45), scale=(1, 2, 1)))
 
     def render(self):
         for obj in self.objects:
