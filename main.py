@@ -6,9 +6,10 @@ It defines the GraphicsEngine class and initializes the Pygame library.
 import sys
 import pygame as pg
 import moderngl as mgl
-from model import Cube
+from scene import Scene
 from camera import Camera
 from light import Light
+from mesh import Mesh
 
 
 class GraphicsEngine:
@@ -33,8 +34,9 @@ class GraphicsEngine:
         self.ctx.enable(flags=mgl.DEPTH_TEST | mgl.CULL_FACE)
         self.clock = pg.time.Clock()
         self.light = Light()
+        self.mesh = Mesh(self)
         self.camera = Camera(self)
-        self.scene = Cube(self)
+        self.scene = Scene(self)
         self.time = 0
         self.delta_time = 0
 
@@ -45,7 +47,8 @@ class GraphicsEngine:
         """
         for event in pg.event.get():
             if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
-                self.scene.destroy()
+                # self.scene.destroy()
+                self.mesh.destroy()
                 pg.quit()
                 sys.exit()
 
