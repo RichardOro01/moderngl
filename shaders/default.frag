@@ -37,7 +37,10 @@ vec3 getLight(vec3 color) {
 };
 
 void main() {
+    float gamma = 2.2;
     vec3 color = texture(u_texture_0, uv_0).rgb;
+    color = pow(color, vec3( gamma));
     color = getLight(color);
+    color = pow(color, vec3(1/gamma));
     gl_FragColor = vec4(color, 1.0);
 } 
